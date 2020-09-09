@@ -3,10 +3,12 @@ from .models import Project, Pledge
 
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    quantity = serializers.IntegerField()
-    comment = serializers.CharField(max_length=200)
+    pledge_quantity = serializers.IntegerField()
+    pledge_description = serializers.CharField(max_length=200)
     anonymous = serializers.BooleanField()
-    supporter = serializers.CharField(max_length=200)
+    terms_privacy = serializers.BooleanField()
+    supporter = serializers.CharField(max_length=100)
+    is_fulfilled = serializers.BooleanField()
     project_id = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -14,14 +16,17 @@ class PledgeSerializer(serializers.Serializer):
 
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    title = serializers.CharField(max_length=200)
-    description = serializers.CharField(max_length=None)
-    goal = serializers.IntegerField()
-    image = serializers.URLField()
+    project_name = serializers.CharField(max_length=100)
+    project_intro = serializers.CharField(max_length=500)
+    project_goal = serializers.IntegerField()
+    category = serializers.CharField(max_length=20)
+    project_stage = serializers.CharField(max_length=10)
+    project_story = serializers.CharField(max_length=5000)
+    project_faq = serializers.CharField(max_length=5000)
+    project_image = serializers.URLField()
     is_open = serializers.BooleanField()
     date_created = serializers.DateTimeField()
-    owner = serializers.CharField(max_length=200)
-    # pledges = PledgeSerializer(many=True, read_only=True)
+    owner = serializers.CharField(max_length=100)
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
