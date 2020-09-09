@@ -23,6 +23,17 @@ STAGES = [
     (RETAIL, "Retail")
 ]
 
+class Update(models.Model):
+    update_content = models.TextField(max_length=5000, verbose_name="project update")
+    update_date = models.DateTimeField(verbose_name="updated on")
+    project = models.ForeignKey(
+        'Project',
+        on_delete=models.CASCADE,
+        related_name='updates',
+        verbose_name="project"
+    )
+    update_author = models.CharField(max_length=100)
+
 class Project(models.Model):
     project_name = models.CharField(max_length=100, verbose_name="project", default="New Project")
     project_intro = models.TextField(max_length=500, verbose_name="introduction", default="A brief intro to the Project goes here.")
@@ -49,3 +60,6 @@ class Pledge(models.Model):
     )
     supporter = models.CharField(max_length=100, verbose_name="pledge made by", default="Someone Wonderful")
     is_fulfilled = models.BooleanField(verbose_name="promise fulfilled", default=False)
+
+
+

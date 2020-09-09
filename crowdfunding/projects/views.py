@@ -3,8 +3,8 @@ from rest_framework import status
 # from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Project, Pledge
-from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
+from .models import Project, Pledge, Update
+from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer, UpdateSerializer
 
 class ProjectList(APIView):
 
@@ -58,3 +58,49 @@ class PledgeList(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+class UpdateList(APIView):
+
+    def get(self, request):
+        updates = Update.objects.all()
+        serializer = UpdateSerializer(updates, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UpdateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # def put(self, request):
+    #     serializer = UpdateSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(
+    #             serializer.data,
+    #             status=status.HTTP_201_CREATED
+    #         )
+    #     return Response(
+    #         serializer.errors,
+    #         status=status.HTTP_400_BAD_REQUEST
+    #     )
+
+    # def delete(self, request):
+    #     serializer = UpdateSerializer(data=delete.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(
+    #             serializer.data,
+    #             status=status.HTTP_200_OK
+    #         )
+    #     return Response(
+    #         serializer.data,
+    #         status=status.HTTP_400_BAD_REQUEST
+    #     )

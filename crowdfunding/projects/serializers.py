@@ -1,5 +1,15 @@
 from rest_framework import serializers
-from .models import Project, Pledge
+from .models import Project, Pledge, Update
+
+class UpdateSerializer(serializers.Serializer):
+    id = serializers.ReadOnlyField()
+    update_content = serializers.CharField(max_length=5000)
+    update_date = serializers.DateTimeField()
+    project_id = serializers.IntegerField()
+    update_author = serializers.CharField(max_length=20)
+
+    def create(self, validated_data):
+        return Update.objects.create(**validated_data)
 
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -33,3 +43,4 @@ class ProjectSerializer(serializers.Serializer):
 
 class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
+    updates = UpdateSerializer(many=True, read_only=True)
