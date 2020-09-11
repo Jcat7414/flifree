@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
@@ -32,7 +33,11 @@ class Update(models.Model):
         related_name='updates',
         verbose_name="project"
     )
-    update_author = models.CharField(max_length=100)
+    update_author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="project_update_author"
+    )
 
 class Project(models.Model):
     project_name = models.CharField(max_length=100, verbose_name="project", default="New Project")
@@ -45,7 +50,11 @@ class Project(models.Model):
     project_image = models.URLField(verbose_name="project image", default="https://via.placeholder.com/300.jpg")
     is_open = models.BooleanField(verbose_name="project status")
     date_created = models.DateTimeField(verbose_name="project commenced")
-    owner = models.CharField(max_length=100)
+    owner = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name = "project_owner"
+    )
 
 class Pledge(models.Model):
     pledge_quantity = models.IntegerField(verbose_name="amount pledged", default=1)
@@ -58,7 +67,11 @@ class Pledge(models.Model):
         related_name='pledges',
         verbose_name="project"
     )
-    supporter = models.CharField(max_length=100, verbose_name="pledge made by", default="Someone Wonderful")
+    supporter = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="pledge_supporter"
+    )
     is_fulfilled = models.BooleanField(verbose_name="promise fulfilled", default=False)
 
 
