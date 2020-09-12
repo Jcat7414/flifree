@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Project, Pledge, Update
+# from .models import Project, Pledge, Update
+from . import models
 
 class UpdateSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -36,7 +37,6 @@ class ProjectSerializer(serializers.Serializer):
     project_image = serializers.URLField()
     is_open = serializers.BooleanField()
     date_created = serializers.DateTimeField()
-    # owner = serializers.CharField(max_length=100)
     owner = serializers.ReadOnlyField(source='owner.id')
 
     def create(self, validated_data):

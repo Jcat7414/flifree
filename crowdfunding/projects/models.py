@@ -49,7 +49,7 @@ class Project(models.Model):
     project_faq = models.TextField(max_length=5000, verbose_name="FAQ", default="A list of FAQ goes here.")
     project_image = models.URLField(verbose_name="project image", default="https://via.placeholder.com/300.jpg")
     is_open = models.BooleanField(verbose_name="project status", default=True)
-    date_created = models.DateTimeField(verbose_name="project commenced")
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="project commenced")
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
@@ -67,7 +67,7 @@ class Pledge(models.Model):
         related_name="pledge_supporter",
         verbose_name="supporter"
     )
-    is_fulfilled = models.BooleanField(verbose_name="promise fulfilled", default=False)
+    is_fulfilled = models.BooleanField(verbose_name="pledge fulfilled", default=False)
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
