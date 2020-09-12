@@ -33,7 +33,7 @@ class Update(models.Model):
         related_name='updates',
         verbose_name="project"
     )
-    update_author = models.ForeignKey(
+    owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="project_update_author"
@@ -61,18 +61,19 @@ class Pledge(models.Model):
     pledge_description = models.CharField(max_length=200, verbose_name="description of pledge", default="All the details about what is being promised to be given do here.")
     anonymous = models.BooleanField(verbose_name="maintain privacy")
     terms_privacy = models.BooleanField(verbose_name="accept Terms and Privacy", default=True)
+    owner = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name="pledge_supporter",
+        verbose_name="supporter"
+    )
+    is_fulfilled = models.BooleanField(verbose_name="promise fulfilled", default=False)
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
         related_name='pledges',
         verbose_name="project"
     )
-    supporter = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.CASCADE,
-        related_name="pledge_supporter"
-    )
-    is_fulfilled = models.BooleanField(verbose_name="promise fulfilled", default=False)
 
 
 
