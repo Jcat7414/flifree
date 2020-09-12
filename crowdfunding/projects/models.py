@@ -30,13 +30,13 @@ class Update(models.Model):
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
-        related_name='updates',
+        related_name='project',
         verbose_name="project"
     )
     owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
-        related_name="project_update_author"
+        related_name="author"
     )
 
 class Project(models.Model):
@@ -48,7 +48,7 @@ class Project(models.Model):
     project_story = models.TextField(max_length=5000, verbose_name="story", default="The project owners background story goes here.")
     project_faq = models.TextField(max_length=5000, verbose_name="FAQ", default="A list of FAQ goes here.")
     project_image = models.URLField(verbose_name="project image", default="https://via.placeholder.com/300.jpg")
-    is_open = models.BooleanField(verbose_name="project status")
+    is_open = models.BooleanField(verbose_name="project status", default=True)
     date_created = models.DateTimeField(verbose_name="project commenced")
     owner = models.ForeignKey(
         get_user_model(),
@@ -59,7 +59,7 @@ class Project(models.Model):
 class Pledge(models.Model):
     pledge_quantity = models.IntegerField(verbose_name="amount pledged", default=1)
     pledge_description = models.CharField(max_length=200, verbose_name="description of pledge", default="All the details about what is being promised to be given do here.")
-    anonymous = models.BooleanField(verbose_name="maintain privacy")
+    anonymous = models.BooleanField(verbose_name="maintain privacy", default=False)
     terms_privacy = models.BooleanField(verbose_name="accept Terms and Privacy", default=True)
     owner = models.ForeignKey(
         get_user_model(),
@@ -71,7 +71,7 @@ class Pledge(models.Model):
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
-        related_name='pledges',
+        related_name='projects',
         verbose_name="project"
     )
 

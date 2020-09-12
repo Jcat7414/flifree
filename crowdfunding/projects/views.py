@@ -1,6 +1,5 @@
 from django.http import Http404
 from rest_framework import status, permissions
-# from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
@@ -168,7 +167,7 @@ class UpdateDetail(APIView):
 
     def get(self, request, pk):
         update = self.get_object(pk)
-        serializer = UpdateDetailSerializer(project)
+        serializer = UpdateDetailSerializer(update)
         return Response(serializer.data)
 
     def put(self, request, pk):

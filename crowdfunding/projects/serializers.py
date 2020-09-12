@@ -71,6 +71,8 @@ class PledgeDetailSerializer(PledgeSerializer):
         instance.owner = validated_data.get('owner', instance.owner)
         instance.is_fulfilled = validated_data.get('is_fulfilled', instance.is_fulfilled)
         instance.project_id = validated_data.get('project_id', instance.project_id)
+        instance.save()
+        return instance
 
 class UpdateDetailSerializer(UpdateSerializer):
     
@@ -79,3 +81,5 @@ class UpdateDetailSerializer(UpdateSerializer):
         instance.update_date = validated_data.get('update_date', instance.update_date)
         instance.project_id = validated_data.get('project_id', instance.project_id)
         instance.owner = validated_data.get('owner', instance.owner)
+        instance.save()
+        return instance
