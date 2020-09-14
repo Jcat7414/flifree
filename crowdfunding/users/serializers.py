@@ -4,9 +4,9 @@ from .models import CustomUser
 
 class CustomUserSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
-    user = serializers.IntegerField()
+    # user = serializers.IntegerField()
     email = serializers.CharField(max_length=200)
-    password = serializers.CharField(max_length=80)
+    password = serializers.CharField(style={'input_type':'password'}, write_only = True, max_length=80)
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
     image = serializers.URLField(max_length=200)
