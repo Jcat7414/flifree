@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
 from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer
-from .permissions import IsOwnerOrReadOnly, IsProjectOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly
 
 class ProjectList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -129,7 +129,7 @@ class PledgeDetail(APIView):
 class UpdateList(APIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
-        IsProjectOwnerOrReadOnly
+        IsOwnerOrReadOnly
     ]
 
     def get(self, request):

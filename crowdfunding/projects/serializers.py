@@ -1,6 +1,6 @@
 from rest_framework import serializers
-# from .models import Project, Pledge, Update
-from . import models
+from .models import Project, Pledge, Update
+# from . import models
 
 class UpdateSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -60,6 +60,7 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.owner = validated_data.get('owner', instance.owner)
         instance.save()
         return instance
+        
 
 class PledgeDetailSerializer(PledgeSerializer):
 

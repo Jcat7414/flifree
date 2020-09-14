@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 class CustomUser(AbstractUser):
-    password = models.CharField(max_length=80, verbose_name="password")
+    # password = models.CharField(max_length=80, verbose_name="password")
     first_name = models.CharField(max_length=50, verbose_name="first name")
     last_name = models.CharField(max_length=50, verbose_name="last name")
     image = models.URLField(max_length=200, verbose_name="profile photo", default="https://via.placeholder.com/300.jpg")
@@ -21,9 +21,9 @@ class CustomUser(AbstractUser):
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
 
-    @property
-    def user(self):
-        return self.id
+    # @property
+    # def user(self):
+    #     return self.id
 
     def __str__(self):
         return self.username

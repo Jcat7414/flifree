@@ -8,9 +8,9 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.owner == request.user
     
 
-class IsProjectOwnerOrReadOnly(permissions.BasePermission):
+# class IsProjectOwnerOrReadOnly(permissions.BasePermission):
 
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            if request.user == project.owner:
-                return obj.owner == request.user
+#     def has_object_permission(self, request, view, obj):
+#         if request.method in permissions.SAFE_METHODS:
+#             if request.user == project.owner:
+#                 return obj.owner == request.user
