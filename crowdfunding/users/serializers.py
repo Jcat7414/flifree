@@ -6,7 +6,7 @@ class CustomUserSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     username = serializers.CharField(max_length=50)
     email = serializers.CharField(max_length=200)
-    password = serializers.CharField(style={'input_type':'password'}, max_length=80)
+    password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
     image = serializers.URLField(max_length=200)
@@ -21,8 +21,7 @@ class CustomUserSerializer(serializers.Serializer):
     created_on = serializers.DateTimeField()
 
     def create(self,validated_data):
-        password = validated_data.pop('password')
-        return CustomUser.objects.create(**validated_data)
+        return CustomUser.objects.create_user(**validated_data)
 
 
 class CustomUserDetailSerializer(CustomUserSerializer):
