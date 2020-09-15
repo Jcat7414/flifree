@@ -30,8 +30,8 @@ class Update(models.Model):
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
-        related_name='project',
-        verbose_name="project"
+        related_name='updates',
+        verbose_name="project updates"
     )
     owner = models.ForeignKey(
         get_user_model(),
@@ -71,8 +71,8 @@ class Pledge(models.Model):
     project = models.ForeignKey(
         'Project',
         on_delete=models.CASCADE,
-        related_name='projects',
-        verbose_name="project"
+        related_name='pledges',
+        verbose_name="project pledges"
     )
 
 

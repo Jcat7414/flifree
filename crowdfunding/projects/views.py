@@ -64,6 +64,11 @@ class ProjectDetail(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
             )
+
+    def delete(self, request, pk):
+        project = self.get_object(pk)
+        project.delete()
+        return Response(status=status.HTTP_200_OK)
         
 
 class PledgeList(APIView):
@@ -88,7 +93,6 @@ class PledgeList(APIView):
         )
 
 class PledgeDetail(APIView):
-
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly
@@ -125,6 +129,12 @@ class PledgeDetail(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
             )
+
+    def delete(self, request, pk):
+        pledge = self.get_object(pk)
+        pledge.delete()
+        return Response(status=status.HTTP_200_OK)
+
 
 class UpdateList(APIView):
     permission_classes = [
@@ -183,8 +193,13 @@ class UpdateDetail(APIView):
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED
-                )
+            )
         return Response(
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
-            )
+        )
+
+    def delete(self, request, pk):
+        update = self.get_object(pk)
+        update.delete()
+        return Response(status=status.HTTP_200_OK)
