@@ -50,6 +50,7 @@ class ProjectSerializer(serializers.Serializer):
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
 
+
 class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
     updates = UpdateSerializer(many=True, read_only=True)
@@ -91,6 +92,6 @@ class UpdateDetailSerializer(UpdateSerializer):
         instance.save()
         return instance
 
-class ProjectPledgesDetailSerializer(ProjectSerializer):
-    project_name = serializers.CharField(source=Project.project_name)
+class ProjectPledgesDetailSerializer(PledgeSerializer):
+    project_id = serializers.CharField(source=Pledge.project_id)
     pledges = PledgeSerializer(many=True, read_only=True)

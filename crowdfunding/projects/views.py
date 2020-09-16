@@ -3,8 +3,9 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
-from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer
+from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, ProjectPledgesDetailSerializer
 from .permissions import IsOwnerOrReadOnly
+from rest_framework.decorators import action
 
 class ProjectList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -203,3 +204,23 @@ class UpdateDetail(APIView):
         update = self.get_object(pk)
         update.delete()
         return Response(status=status.HTTP_200_OK)
+
+class ProjectPledgesDetail(APIView):
+
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
+
+    def get_object(self, project_id):
+        try:
+            project_pledges = Pledge.objects.get(project_id)
+            self.check_object_permissions(self.request, project_pledges)
+            return project_pledges
+        except Pledge.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        project_pledges = self.get_object(pk)
+        serializer = ProjectPledgesDetailSerializer(project_pledges)
+        return Response(serializer.data)
