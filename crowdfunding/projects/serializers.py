@@ -92,6 +92,3 @@ class UpdateDetailSerializer(UpdateSerializer):
         instance.save()
         return instance
 
-class ProjectPledgesDetailSerializer(PledgeSerializer):
-    project_id = serializers.CharField(source=Pledge.project_id)
-    pledges = PledgeSerializer(many=True, read_only=True)

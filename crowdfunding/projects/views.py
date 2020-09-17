@@ -1,11 +1,11 @@
 from django.http import Http404
-from rest_framework import status, permissions
+from rest_framework import status, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
-from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, ProjectPledgesDetailSerializer
+from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer
 from .permissions import IsOwnerOrReadOnly
-from rest_framework.decorators import action
+from rest_framework import generics, filters
 
 class ProjectList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -14,6 +14,7 @@ class ProjectList(APIView):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
         return Response(serializer.data)
+
 
     def post(self, request):
         serializer = ProjectSerializer(data=request.data)
@@ -74,12 +75,14 @@ class ProjectDetail(APIView):
 
 class PledgeList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    
     def get(self, request):
-        pledges = Pledge.objects.all()
-        serializer = PledgeSerializer(pledges, many=True)
+        pledge = Pledge.objects.all()
+        serializer = PledgeSerializer(pledge, many=True)
+        filter_backends = [filters.SearchFilter]
+        search_fields = ['owner__id', 'project__id']
         return Response(serializer.data)
-
+   
     def post(self, request):
         serializer = PledgeSerializer(data=request.data)
         if serializer.is_valid():
@@ -205,22 +208,3 @@ class UpdateDetail(APIView):
         update.delete()
         return Response(status=status.HTTP_200_OK)
 
-class ProjectPledgesDetail(APIView):
-
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
-    ]
-
-    def get_object(self, project_id):
-        try:
-            project_pledges = Pledge.objects.get(project_id)
-            self.check_object_permissions(self.request, project_pledges)
-            return project_pledges
-        except Pledge.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        project_pledges = self.get_object(pk)
-        serializer = ProjectPledgesDetailSerializer(project_pledges)
-        return Response(serializer.data)
