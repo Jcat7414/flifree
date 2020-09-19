@@ -70,7 +70,7 @@ class ProjectDetail(APIView):
     def delete(self, request, pk):
         project = self.get_object(pk)
         project.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
         
 
 class PledgeList(APIView):
@@ -137,7 +137,7 @@ class PledgeDetail(APIView):
     def delete(self, request, pk):
         pledge = self.get_object(pk)
         pledge.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UpdateList(APIView):
@@ -206,5 +206,5 @@ class UpdateDetail(APIView):
     def delete(self, request, pk):
         update = self.get_object(pk)
         update.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 

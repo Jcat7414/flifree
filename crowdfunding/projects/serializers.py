@@ -92,3 +92,7 @@ class UpdateDetailSerializer(UpdateSerializer):
         instance.save()
         return instance
 
+# class ProjectPledgeDetailSerializer(PledgeSerializer):
+
+#     def get(self, instance, validated_data):
+         
