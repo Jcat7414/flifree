@@ -6,6 +6,7 @@ from .models import Project, Pledge, Update
 from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import generics, filters
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 class ProjectList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -14,7 +15,6 @@ class ProjectList(APIView):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
         return Response(serializer.data)
-
 
     def post(self, request):
         serializer = ProjectSerializer(data=request.data)
@@ -79,8 +79,8 @@ class PledgeList(APIView):
     def get(self, request):
         pledge = Pledge.objects.all()
         serializer = PledgeSerializer(pledge, many=True)
-        filter_backends = [filters.SearchFilter]
-        search_fields = ['owner__id', 'project__id']
+        # filter_backends = [filters.SearchFilter]
+        # search_fields = ['pledge_description']
         return Response(serializer.data)
    
     def post(self, request):
@@ -176,7 +176,7 @@ class UpdateDetail(APIView):
             update = Update.objects.get(pk=pk)
             self.check_object_permissions(self.request, update)
             return update
-        except Pledge.DoesNotExist:
+        except Update.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
@@ -208,3 +208,37 @@ class UpdateDetail(APIView):
         update.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+
+class FounderProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+
+    def get_queryset(self):
+        try:
+            username = self.kwargs['project_owner']
+            return Project.objects.filter(owner__username=username)
+        except owner__username.DoesNotExist:
+            raise Http404
+
+class SupporterPledgeList(generics.ListAPIView):
+    serializer_class = PledgeSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['pledge_supporter']
+        return Pledge.objects.filter(owner__username=username)
+
+class FounderUpdateList(generics.ListAPIView):
+    serializer_class = UpdateSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['update_author']
+        return Update.objects.filter(owner__username=username)
+
+
+
+class ProjectPledgeList(generics.ListAPIView):
+    serializer_class = PledgeSerializer
+
+    def get_queryset(self):
+        pledgesfor = self.kwargs['pledges']
+        return Pledge.objects.filter(project__project_name=pledgesfor)

@@ -55,7 +55,6 @@ class ProjectDetailSerializer(ProjectSerializer):
     pledges = PledgeSerializer(many=True, read_only=True)
     updates = UpdateSerializer(many=True, read_only=True)
 
-
     def update(self, instance, validated_data):
         instance.project_name = validated_data.get('project_name', instance.project_name)
         instance.project_intro = validated_data.get('project_intro', instance.project_intro)
@@ -92,7 +91,8 @@ class UpdateDetailSerializer(UpdateSerializer):
         instance.save()
         return instance
 
-# class ProjectPledgeDetailSerializer(PledgeSerializer):
+# class ProjectPledgeSerializer(PledgeSerializer):
 
-#     def get(self, instance, validated_data):
+#     def read(self, validated_data):
+#             return Pledge.objects.all(**validated_data)
          
