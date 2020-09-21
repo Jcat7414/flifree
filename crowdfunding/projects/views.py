@@ -46,6 +46,8 @@ class ProjectDetail(APIView):
     def get(self, request, pk):
         project = self.get_object(pk)
         serializer = ProjectDetailSerializer(project)
+        filter_backends = [filters.SearchFilter]
+        search_fields = ['project_name']
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -217,7 +219,7 @@ class FounderProjectList(generics.ListAPIView):
         try:
             username = self.kwargs['project_owner']
             return Project.objects.filter(owner__username=username)
-        except owner__username.DoesNotExist:
+        except project_owner.DoesNotExist:
             raise Http404
 
 class SupporterPledgeList(generics.ListAPIView):

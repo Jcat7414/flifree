@@ -24,6 +24,14 @@ class PledgeSerializer(serializers.Serializer):
     def create(self, validated_data):
         return Pledge.objects.create(**validated_data)
 
+# CAT_CHOICES=(
+#     ('Facilities', 'Facilities'),
+#     ('Resources', 'Resources'),
+#     ('Exposure', 'Exposure'),
+#     ('Expertise', 'Expertise')
+# )
+
+
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     project_name = serializers.CharField(label='project')
@@ -31,6 +39,7 @@ class ProjectSerializer(serializers.Serializer):
     project_goal = serializers.IntegerField(label="project_goal", default=12)
     category = serializers.MultipleChoiceField(
         choices=('Facilities', 'Resources', 'Exposure', 'Expertise'),
+        # choices=CAT_CHOICES,
         default='Expertise',
         label='needs'
     )
