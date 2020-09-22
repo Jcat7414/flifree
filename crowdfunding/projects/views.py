@@ -244,3 +244,22 @@ class ProjectPledgeList(generics.ListAPIView):
     def get_queryset(self):
         pledgesfor = self.kwargs['pledges']
         return Pledge.objects.filter(project__project_name=pledgesfor)
+
+class ProjectUpdateList(generics.ListAPIView):
+    serializer_class = UpdateSerializer
+
+    def get_queryset(self):
+        updatesfor = self.kwargs['updates']
+        return Update.objects.filter(project__project_name=updatesfor)
+
+class PledgeTotalList(generics.ListAPIView):
+    serializer_class = PledgeSerializer
+
+    def queryset(self):
+        amount = self.kwargs['pledge_quantity']
+        total = sum(amount)
+        return total
+        # if pledge_quantity in request.GET and request.get['pledge_quantity']:
+        #     response.data['sum'] = Pledge.objects.filter(ref=int(request.GET['pledge_quantity'])
+        #     ).aggregate(sum=SUM('pledge_quantity'))['sum']
+        # return total

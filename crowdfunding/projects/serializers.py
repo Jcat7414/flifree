@@ -32,7 +32,6 @@ class PledgeSerializer(serializers.Serializer):
 #     ('Expertise', 'Expertise')
 # )
 
-
 class ProjectSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     project_name = serializers.CharField(label='project')
@@ -107,4 +106,9 @@ class ProjectPledgeSerializer(PledgeSerializer):
 
     def read(self, validated_data):
             return Pledge.objects.all(**validated_data)
+
+class ProjectUpdateSerializer(UpdateSerializer):
+
+    def read(self, validated_data):
+            return Update.objects.all(**validated_data)
          

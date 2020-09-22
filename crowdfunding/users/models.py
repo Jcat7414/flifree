@@ -21,9 +21,5 @@ class CustomUser(AbstractUser):
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
 
-    # @property
-    # def user(self):
-    #     return self.id
-
     def __str__(self):
         return self.username
