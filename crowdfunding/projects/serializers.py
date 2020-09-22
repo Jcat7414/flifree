@@ -37,12 +37,12 @@ class ProjectSerializer(serializers.Serializer):
     project_name = serializers.CharField(label='project')
     project_intro = serializers.CharField(label='introduction', default="'A brief intro to the Project goes here.")
     project_goal = serializers.IntegerField(label="project_goal", default=12)
-    category = serializers.MultipleChoiceField(
-        choices=('Facilities', 'Resources', 'Exposure', 'Expertise'),
-        # choices=CAT_CHOICES,
-        default='Expertise',
-        label='needs'
-    )
+    # category = serializers.MultipleChoiceField(
+    #     choices=('Facilities', 'Resources', 'Exposure', 'Expertise'),
+    #     # choices=CAT_CHOICES,
+    #     default='Expertise',
+    #     label='needs'
+    # )
     project_stage = serializers.ChoiceField(
         choices=('Start', 'Trial', 'Adjust', 'Retail'),
         default='Start',
