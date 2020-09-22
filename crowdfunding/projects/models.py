@@ -21,7 +21,7 @@ class Project(models.Model):
     project_name = models.CharField(max_length=100)
     project_intro = models.TextField(max_length=500)
     project_goal = models.IntegerField()
-    # category = models.CharField(max_length=20)
+    category = models.CharField(max_length=20)
     project_stage = models.CharField(max_length=10)
     project_story = models.TextField(max_length=5000)
     project_faq = models.TextField(max_length=5000)
