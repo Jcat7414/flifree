@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 class Update(models.Model):
+    update_name = models.CharField(max_length=100)
     update_content = models.TextField(max_length=5000)
     update_date = models.DateTimeField(auto_now_add=True)
     project = models.ForeignKey(

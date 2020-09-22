@@ -3,6 +3,7 @@ from .models import Project, Pledge, Update
 
 class UpdateSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
+    update_name = serializers.CharField(label='update about')
     update_content = serializers.CharField(label='project update')
     update_date = serializers.DateTimeField(label='updated on')
     project_id = serializers.IntegerField()
@@ -95,14 +96,15 @@ class PledgeDetailSerializer(PledgeSerializer):
 class UpdateDetailSerializer(UpdateSerializer):
     
     def update(self, instance, validated_data):
+        instance.update_name = validated_data.get('update_name', instance.update_name)
         instance.update_content = validated_data.get('update_content', instance.update_content)
         instance.update_date = validated_data.get('update_date', instance.update_date)
         instance.project_id = validated_data.get('project_id', instance.project_id)
         instance.save()
         return instance
 
-# class ProjectPledgeSerializer(PledgeSerializer):
+class ProjectPledgeSerializer(PledgeSerializer):
 
-#     def read(self, validated_data):
-#             return Pledge.objects.all(**validated_data)
+    def read(self, validated_data):
+            return Pledge.objects.all(**validated_data)
          

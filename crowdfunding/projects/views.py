@@ -14,6 +14,8 @@ class ProjectList(APIView):
     def get(self, request):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
+        filter_backends = [filters.SearchFilter]
+        search_fields = ['project_name']
         return Response(serializer.data)
 
     def post(self, request):
@@ -46,8 +48,6 @@ class ProjectDetail(APIView):
     def get(self, request, pk):
         project = self.get_object(pk)
         serializer = ProjectDetailSerializer(project)
-        filter_backends = [filters.SearchFilter]
-        search_fields = ['project_name']
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -81,8 +81,8 @@ class PledgeList(APIView):
     def get(self, request):
         pledge = Pledge.objects.all()
         serializer = PledgeSerializer(pledge, many=True)
-        # filter_backends = [filters.SearchFilter]
-        # search_fields = ['pledge_description']
+        filter_backends = [filters.SearchFilter]
+        search_fields = ['pledge_description']
         return Response(serializer.data)
    
     def post(self, request):
