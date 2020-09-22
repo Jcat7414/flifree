@@ -8,9 +8,14 @@ class UpdateSerializer(serializers.Serializer):
     update_date = serializers.DateTimeField(label='updated on')
     project_id = serializers.IntegerField()
     owner = serializers.ReadOnlyField(source='owner.id')
+    author = serializers.SerializerMethodField('get_username_from_owner')
 
     def create(self, validated_data):
         return Update.objects.create(**validated_data)
+
+    def get_username_from_owner(self, update):
+        username = update.owner.full_name
+        return username
 
 class PledgeSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
@@ -21,9 +26,15 @@ class PledgeSerializer(serializers.Serializer):
     owner = serializers.ReadOnlyField(source='owner.id')
     is_fulfilled = serializers.BooleanField(label='pledge fulfilled', default=False)
     project_id = serializers.IntegerField()
+    supporter = serializers.SerializerMethodField('get_username_from_owner')
 
     def create(self, validated_data):
         return Pledge.objects.create(**validated_data)
+
+    def get_username_from_owner(self, pledge):
+        username = pledge.owner.full_name
+        return username
+
 
 # CAT_CHOICES=(
 #     ('Facilities', 'Facilities'),
@@ -56,9 +67,15 @@ class ProjectSerializer(serializers.Serializer):
     date_created = serializers.DateTimeField(label='project commenced')
     date_amended = serializers.DateTimeField(label='project last amended')
     owner = serializers.ReadOnlyField(source='owner.id')
+    founder = serializers.SerializerMethodField('get_username_from_owner')
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
+
+    def get_username_from_owner(self, project):
+        username = project.owner.full_name
+        return username
+
 
 
 class ProjectDetailSerializer(ProjectSerializer):
@@ -111,4 +128,14 @@ class ProjectUpdateSerializer(UpdateSerializer):
 
     def read(self, validated_data):
             return Update.objects.all(**validated_data)
+
+
+# class OutcomeSerializer(serializers.Serializer):
+#     id = serializers.ReadOnlyField()
+#     project_outcome_id = serializers.IntegerField()
+#     pledge_outcome_id = serializers.IntegerField()
+
+#     def create(self, validated_data):
+#         return Outcome.objects.create(**validated_data)
+
          
