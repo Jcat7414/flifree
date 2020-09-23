@@ -130,12 +130,8 @@ class ProjectUpdateSerializer(UpdateSerializer):
             return Update.objects.all(**validated_data)
 
 
-# class OutcomeSerializer(serializers.Serializer):
-#     id = serializers.ReadOnlyField()
-#     project_outcome_id = serializers.IntegerField()
-#     pledge_outcome_id = serializers.IntegerField()
+class PledgeAmountSerializer(serializers.ModelSerializer):
 
-#     def create(self, validated_data):
-#         return Outcome.objects.create(**validated_data)
-
-         
+    class Meta:
+        model = Pledge
+        fields = ['pledge_quantity']

@@ -55,18 +55,7 @@ class Pledge(models.Model):
         verbose_name="project pledges"
     )
 
-# class Outcome(models.Model):
-#     project_outcome = models.ForeignKey(
-#         'Project',
-#         on_delete=models.CASCADE,
-#         related_name='project_outcome',
-#         verbose_name="project outcomes"
-#     )
-#     pledge_outcome = models.ForeignKey(
-#         'Pledge',
-#         on_delete=models.CASCADE,
-#         related_name='pledge_outcome',
-#         verbose_name="pledge outcome"
-#     )
-
-
+    # @property
+    # def total_pledged(self):
+    #     amount = sum('pledge_quantity')
+    #     return self.total_pledged(amount)

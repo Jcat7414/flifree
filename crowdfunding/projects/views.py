@@ -3,7 +3,7 @@ from rest_framework import status, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
-from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer
+from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, PledgeAmountSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import generics, filters
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -253,20 +253,12 @@ class ProjectUpdateList(generics.ListAPIView):
         updatesfor = self.kwargs['updates']
         return Update.objects.filter(project__project_name=updatesfor)
 
-# class OutcomeList(APIView):
-#     serializer_class = PledgeSerializer
+class PledgeAmountList(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get(self, request):
+        amount = Pledge.objects.all()
+        serializer = PledgeAmountSerializer(amount, many=True)
+        return Response(serializer.data)
 
-#     def queryset(self):
-#         amount = self.kwargs['pledge_quantity']
-#         total = sum(amount)
-#         return total
-
-    #     if pledge_quantity in request.GET and request.get['pledge_quantity']:
-    #         response.data['sum'] = Pledge.objects.filter(ref=int(request.GET['pledge_quantity'])
-    #         ).aggregate(sum=SUM('pledge_quantity'))['sum']
-    #     return total
-
-    # def get(self, request):
-    #         total = Outcome.objects.filter(sum('pledge__pledge_quantity'))
-    #         serializer = OutcomeSerializer(outcome, many=True)
-    #         return total
+    
