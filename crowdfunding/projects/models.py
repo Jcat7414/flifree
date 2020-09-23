@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
+from django.db.models import Count, Sum
+
 
 class Update(models.Model):
     update_name = models.CharField(max_length=100)
@@ -54,8 +56,10 @@ class Pledge(models.Model):
         related_name='pledges',
         verbose_name="project pledges"
     )
+    
+    # pledged_to_date = models.IntegerField('total_pledged')
 
     # @property
-    # def total_pledged(self):
-    #     amount = sum('pledge_quantity')
+    # def total_pledged(self, pledge_quantity):
+    #     amount = Sum('pledge_quantity')
     #     return self.total_pledged(amount)

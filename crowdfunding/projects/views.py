@@ -3,7 +3,7 @@ from rest_framework import status, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
-from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, PledgeAmountSerializer
+from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, PledgeAmountSerializer, PledgeTotalSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import generics, filters
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -253,6 +253,8 @@ class ProjectUpdateList(generics.ListAPIView):
         updatesfor = self.kwargs['updates']
         return Update.objects.filter(project__project_name=updatesfor)
 
+
+
 class PledgeAmountList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
@@ -261,4 +263,9 @@ class PledgeAmountList(APIView):
         serializer = PledgeAmountSerializer(amount, many=True)
         return Response(serializer.data)
 
-    
+class PledgeTotalList(generics.ListAPIView):
+    serializer_class = PledgeTotalSerializer
+
+    def get_queryset(self):
+        total_pledged = self.kwargs['amounts']
+        return Pledge.objects.filter(amounts=total_pledged)
