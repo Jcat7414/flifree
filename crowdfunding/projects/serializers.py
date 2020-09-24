@@ -19,7 +19,7 @@ class UpdateSerializer(serializers.Serializer):
         username = update.owner.full_name
         return username
 
-class PledgeSerializer(serializers.Serializer):
+class PledgeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     pledge_quantity = serializers.IntegerField(label='amount pledged', default=1)
     pledge_description = serializers.CharField(label='description of pledge', max_length=500)
@@ -29,6 +29,7 @@ class PledgeSerializer(serializers.Serializer):
     is_fulfilled = serializers.BooleanField(label='pledge fulfilled', default=False)
     project_id = serializers.IntegerField()
     supporter = serializers.SerializerMethodField('get_username_from_owner')
+    percent_pledged = serializers.IntegerField()
 
     def create(self, validated_data):
         return Pledge.objects.create(**validated_data)
@@ -37,7 +38,11 @@ class PledgeSerializer(serializers.Serializer):
         username = pledge.owner.full_name
         return username
 
+    class Meta:
+        model = Pledge
+        fields = '__all__'
 
+        
 # CAT_CHOICES=(
 #     ('Facilities', 'Facilities'),
 #     ('Resources', 'Resources'),
@@ -140,21 +145,3 @@ class PledgeAmountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pledge
         fields = ['project_id', 'pledge_quantity']
-
-class PledgeTotalSerializer(serializers.ListSerializer):
-    def update(self, instance, validated_data):
-        project_list = {project.id: project for project in instance}
-        amount_list = {amount['id']: amount for amount in validated_data}
-
-        amounts = []
-        for project.id, amount in amount_list.items():
-            project = project_list.get(project.id, None)
-            if project is None:
-                amounts.append(self.child.create(amount))
-            else:
-                amounts.append(self.child.update(project, amount))
-        
-        return int(amounts)
-
-    def create(self, validated_data):
-        return Pledge.objects.create(pledge_quantity=amounts)

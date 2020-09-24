@@ -3,7 +3,7 @@ from rest_framework import status, permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
-from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, PledgeAmountSerializer, PledgeTotalSerializer
+from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, PledgeAmountSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import generics, filters
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -117,6 +117,7 @@ class PledgeDetail(APIView):
         pledge = self.get_object(pk)
         serializer = PledgeDetailSerializer(pledge)
         return Response(serializer.data)
+        
 
     def put(self, request, pk):
         pledge = self.get_object(pk)
@@ -263,9 +264,29 @@ class PledgeAmountList(APIView):
         serializer = PledgeAmountSerializer(amount, many=True)
         return Response(serializer.data)
 
-class PledgeTotalList(generics.ListAPIView):
-    serializer_class = PledgeTotalSerializer
+class ProjectPledgeAmount(ProjectDetail):
+    
+    def get_object(self, pk):
+        try:
+            project = Project.objects.get(pk=pk)
+            self.check_object_permissions(self.request, project)
+            return project
+        except Project.DoesNotExist:
+            raise Http404
 
-    def get_queryset(self):
-        total_pledged = self.kwargs['amounts']
-        return Pledge.objects.filter(amounts=total_pledged)
+    def get(self, request, pk):
+        project = self.get_object(pk)
+        serializer = ProjectDetailSerializer(project)
+        # return Response(serializer.data)
+        
+        pledged_so_far = serializer.data 
+
+        time_pledged = {}
+        time_pledged['total_pledged'] = 0
+        for time in range(len(pledged_so_far['pledges'])):
+            time_pledged['total_pledged'] += pledged_so_far['pledges'][time]['pledge_quantity']
+        return Response(time_pledged)
+
+
+
+

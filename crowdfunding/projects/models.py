@@ -38,6 +38,7 @@ class Project(models.Model):
         related_name = "project_owner"
     )
 
+
 class Pledge(models.Model):
     pledge_quantity = models.IntegerField()
     pledge_description = models.CharField(max_length=200)
@@ -56,10 +57,8 @@ class Pledge(models.Model):
         related_name='pledges',
         verbose_name="project pledges"
     )
-    
-    # pledged_to_date = models.IntegerField('total_pledged')
 
-    # @property
-    # def total_pledged(self, pledge_quantity):
-    #     amount = Sum('pledge_quantity')
-    #     return self.total_pledged(amount)
+    @property
+    def percent_pledged(self):
+        return ((int(self.pledge_quantity) / int(self.project.project_goal)) * 100)
+    
