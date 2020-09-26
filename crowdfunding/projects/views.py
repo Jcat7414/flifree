@@ -4,10 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge, Update
 from .serializers import ProjectSerializer, ProjectDetailSerializer, PledgeSerializer, PledgeDetailSerializer, UpdateSerializer, UpdateDetailSerializer, PledgeAmountSerializer
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsAdminUser
 from rest_framework import generics, filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.db.models import Count, Sum
+from users.models import CustomUser
 
 class ProjectList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -69,6 +70,10 @@ class ProjectDetail(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
             )
+
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
 
     def delete(self, request, pk):
         project = self.get_object(pk)
@@ -138,6 +143,10 @@ class PledgeDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST
             )
 
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
+
     def delete(self, request, pk):
         pledge = self.get_object(pk)
         pledge.delete()
@@ -145,19 +154,22 @@ class PledgeDetail(APIView):
 
 
 class UpdateList(APIView):
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
-    ]
+    
 
     def get(self, request):
         updates = Update.objects.all()
         serializer = UpdateSerializer(updates, many=True)
         return Response(serializer.data)
 
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
+
     def post(self, request):
         serializer = UpdateSerializer(data=request.data)
-        if serializer.is_valid():
+        owner = Project.objects.get(pk=request.data['project_id']).owner_id
+        if serializer.is_valid() and request.user==CustomUser.objects.get(pk=owner):
             serializer.save(owner=request.user)
             return Response(
                 serializer.data,
@@ -311,3 +323,31 @@ class ExpertiseProjectList(generics.ListAPIView):
     def get_queryset(self):
         expertise = Project.objects.filter(needs_expertise=True)
         return expertise
+
+class StartProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        stage = Project.objects.filter(project_stage='Start')
+        return stage
+
+class TrialProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        stage = Project.objects.filter(project_stage='Trial')
+        return stage
+
+class AdjustProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        stage = Project.objects.filter(project_stage='Adjust')
+        return stage
+
+class RetailProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        stage = Project.objects.filter(project_stage='Retail')
+        return stage

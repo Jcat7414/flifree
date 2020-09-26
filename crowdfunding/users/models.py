@@ -14,7 +14,7 @@ class CustomUser(AbstractUser):
     terms_privacy = models.BooleanField(default=True)
     founder = models.BooleanField(verbose_name="founder", default=False)
     supporter = models.BooleanField(verbose_name="supporter", default=False)
-    admin = models.BooleanField(verbose_name="admin", default=False)
+    is_staff = models.BooleanField(verbose_name="admin", default=False)
     created_on = models.DateTimeField(verbose_name="created on", default=timezone.now)
    
     @property
