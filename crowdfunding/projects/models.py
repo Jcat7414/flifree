@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
-from django.db.models import Count, Sum
-
 
 class Update(models.Model):
     update_name = models.CharField(max_length=100)
@@ -19,12 +17,14 @@ class Update(models.Model):
         related_name="update_author"
     )
 
-
 class Project(models.Model):
     project_name = models.CharField(max_length=100)
     project_intro = models.TextField(max_length=500)
     project_goal = models.IntegerField()
-    category = models.CharField(max_length=20)
+    needs_facilities = models.BooleanField()
+    needs_resources = models.BooleanField()
+    needs_exposure = models.BooleanField()
+    needs_expertise = models.BooleanField()
     project_stage = models.CharField(max_length=10)
     project_story = models.TextField(max_length=5000)
     project_faq = models.TextField(max_length=5000)
@@ -42,6 +42,10 @@ class Project(models.Model):
 class Pledge(models.Model):
     pledge_quantity = models.IntegerField()
     pledge_description = models.CharField(max_length=200)
+    sup_facilities = models.BooleanField()
+    sup_resources = models.BooleanField()
+    sup_exposure = models.BooleanField()
+    sup_expertise = models.BooleanField()
     anonymous = models.BooleanField()
     terms_privacy = models.BooleanField()
     owner = models.ForeignKey(

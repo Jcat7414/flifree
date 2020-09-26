@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Project, Pledge, Update
-from django.db.models import Count, Sum
 
 
 class UpdateSerializer(serializers.Serializer):
@@ -23,6 +22,10 @@ class PledgeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     pledge_quantity = serializers.IntegerField(label='amount pledged', default=1)
     pledge_description = serializers.CharField(label='description of pledge', max_length=500)
+    sup_facilities = serializers.BooleanField(label='supporting Facilities', default=False)
+    sup_resources = serializers.BooleanField(label='supporting Resources', default=False)
+    sup_exposure = serializers.BooleanField(label='supporting Exposure', default=False)
+    sup_expertise = serializers.BooleanField(label='supporting Expertise', default=False)
     anonymous = serializers.BooleanField(label='remain anonymous', default=False)
     terms_privacy = serializers.BooleanField(label='accept Terms and Privacy', default=True)
     owner = serializers.ReadOnlyField(source='owner.id')
@@ -56,12 +59,16 @@ class ProjectSerializer(serializers.Serializer):
     project_intro = serializers.CharField(label='introduction', default="'A brief intro to the Project goes here.")
     project_goal = serializers.IntegerField(label="project_goal", default=12)
     # category = serializers.MultipleChoiceField(
-    category = serializers.ChoiceField(
-        choices=('Facilities', 'Resources', 'Exposure', 'Expertise'),
-        # choices=CAT_CHOICES,
-        default='Expertise',
-        label='needs'
-    )
+    # category = serializers.ChoiceField(
+    #     choices=('Facilities', 'Resources', 'Exposure', 'Expertise'),
+    #     # choices=CAT_CHOICES,
+    #     default='Expertise',
+    #     label='needs'
+    # )
+    needs_facilities = serializers.BooleanField(label='needs Facilities', default=False)
+    needs_resources = serializers.BooleanField(label='needs Resources', default=False)
+    needs_exposure = serializers.BooleanField(label='needs Exposure', default=False)
+    needs_expertise = serializers.BooleanField(label='needs Expertise', default=False)
     project_stage = serializers.ChoiceField(
         choices=('Start', 'Trial', 'Adjust', 'Retail'),
         default='Start',
@@ -93,7 +100,10 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.project_name = validated_data.get('project_name', instance.project_name)
         instance.project_intro = validated_data.get('project_intro', instance.project_intro)
         instance.project_goal = validated_data.get('project_goal', instance.project_goal)
-        instance.category = validated_data.get('category', instance.category)
+        instance.needs_facilities = validated_data.get('needs_facilities', instance.needs_facilities)
+        instance.needs_resources = validated_data.get('needs_resources', instance.needs_resources)
+        instance.needs_exposure = validated_data.get('needs_exposure', instance.needs_exposure)
+        instance.needs_expertise = validated_data.get('needs_expertise', instance.needs_expertise)
         instance.project_stage = validated_data.get('project_stage', instance.project_stage)
         instance.project_story = validated_data.get('project_story', instance.project_story)
         instance.project_faq = validated_data.get('project_faq', instance.project_faq)
@@ -109,6 +119,10 @@ class PledgeDetailSerializer(PledgeSerializer):
     def update(self, instance, validated_data):
         instance.pledge_quantity = validated_data.get('pledge_quantity', instance.pledge_quantity)
         instance.pledge_description = validated_data.get('pledge_description', instance.pledge_description)
+        instance.sup_facilities = validated_data.get('supporting Facilities', instance.sup_facilities)
+        instancee.sup_resources = validated_data.get('supporting Resources', instance.sup_resources)
+        instance.sup_exposure = validated_data.get('supporting Exposure', instance.sup_exposure)
+        instance.sup_expertise = validated_data.get('supporting Expertise', instance.sup_expertise)
         instance.anonymous = validated_data.get('anonymous', instance.anonymous)
         instance.terms_privacy = validated_data.get('terms_privacy', instance.terms_privacy)
         instance.is_fulfilled = validated_data.get('is_fulfilled', instance.is_fulfilled)

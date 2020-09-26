@@ -5,7 +5,11 @@ from . import views
 urlpatterns = [
     path('projects/', views.ProjectList.as_view()),
     path('projects/<int:pk>/', views.ProjectDetail.as_view()),
-    path('projects/<project_owner>/', views.FounderProjectList.as_view()),
+    path('projects/owner/<project_owner>/', views.FounderProjectList.as_view()),
+    path('projects/facilities/', views.FacilitiesProjectList.as_view()),
+    path('projects/resources/', views.ResourcesProjectList.as_view()),
+    path('projects/exposure/', views.ExposureProjectList.as_view()),
+    path('projects/expertise/', views.ExpertiseProjectList.as_view()),
     path('projects/<int:pk>/pledgesfor/<pledges>/', views.ProjectPledgeList.as_view()),
     path('projects/<int:pk>/updatesfor/<updates>/', views.ProjectUpdateList.as_view()),
     path('projects/<int:pk>/pledged/', views.ProjectPledgeAmount.as_view()),

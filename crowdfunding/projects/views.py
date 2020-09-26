@@ -218,11 +218,8 @@ class FounderProjectList(generics.ListAPIView):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        try:
-            username = self.kwargs['project_owner']
-            return Project.objects.filter(owner__username=username)
-        except project_owner.DoesNotExist:
-            raise Http404
+        username = self.kwargs['project_owner']
+        return Project.objects.filter(owner__username=username)
 
 class SupporterPledgeList(generics.ListAPIView):
     serializer_class = PledgeSerializer
@@ -287,6 +284,30 @@ class ProjectPledgeAmount(ProjectDetail):
             time_pledged['total_pledged'] += pledged_so_far['pledges'][time]['pledge_quantity']
         return Response(time_pledged)
 
+class FacilitiesProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        facilities = Project.objects.filter(needs_facilities=True)
+        return facilities
 
+class ResourcesProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        resources = Project.objects.filter(needs_resources=True)
+        return resources
 
+class ExposureProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        exposure = Project.objects.filter(needs_exposure=True)
+        return exposure
 
+class ExpertiseProjectList(generics.ListAPIView):
+    serializer_class = ProjectSerializer
+    
+    def get_queryset(self):
+        expertise = Project.objects.filter(needs_expertise=True)
+        return expertise
