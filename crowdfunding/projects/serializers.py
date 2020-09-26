@@ -25,13 +25,15 @@ class PledgeSerializer(serializers.ModelSerializer):
     sup_facilities = serializers.BooleanField(label='supporting Facilities', default=False)
     sup_resources = serializers.BooleanField(label='supporting Resources', default=False)
     sup_exposure = serializers.BooleanField(label='supporting Exposure', default=False)
-    sup_expertise = serializers.BooleanField(label='supporting Expertise', default=False)
+    sup_expertise = serializers.BooleanField(label='supporting Expertise', default=True)
     anonymous = serializers.BooleanField(label='remain anonymous', default=False)
     terms_privacy = serializers.BooleanField(label='accept Terms and Privacy', default=True)
     owner = serializers.ReadOnlyField(source='owner.id')
     is_fulfilled = serializers.BooleanField(label='pledge fulfilled', default=False)
     project_id = serializers.IntegerField()
     supporter = serializers.SerializerMethodField('get_username_from_owner')
+    supporter_email = serializers.SerializerMethodField('get_email_from_owner')
+    supporter_phone = serializers.SerializerMethodField('get_phone_from_owner')
     percent_pledged = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -40,6 +42,14 @@ class PledgeSerializer(serializers.ModelSerializer):
     def get_username_from_owner(self, pledge):
         username = pledge.owner.full_name
         return username
+
+    def get_email_from_owner(self, pledge):
+        email = pledge.owner.email
+        return email
+
+    def get_phone_from_owner(self, pledge):
+        phone = pledge.owner.phone
+        return phone
 
     class Meta:
         model = Pledge
@@ -82,6 +92,7 @@ class ProjectSerializer(serializers.Serializer):
     date_amended = serializers.DateTimeField(label='project last amended')
     owner = serializers.ReadOnlyField(source='owner.id')
     founder = serializers.SerializerMethodField('get_username_from_owner')
+
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)

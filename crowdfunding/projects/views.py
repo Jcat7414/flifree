@@ -155,7 +155,6 @@ class PledgeDetail(APIView):
 
 class UpdateList(APIView):
     
-
     def get(self, request):
         updates = Update.objects.all()
         serializer = UpdateSerializer(updates, many=True)

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics, filters
 from .models import CustomUser
 from .serializers import CustomUserSerializer, CustomUserDetailSerializer, AdminUserDetailSerializer
 from .permissions import IsOwnerOrReadOnly, IsAdminUser
@@ -101,3 +101,28 @@ class AdminUserDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class FoundersList(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        founders = CustomUser.objects.filter(founder=True)
+        return founders
+
+class SupportersList(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        supporters = CustomUser.objects.filter(supporter=True)
+        return supporters
+
+class StaffList(generics.ListAPIView):
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
+
+    serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        staff = CustomUser.objects.filter(is_staff=True)
+        return staff
