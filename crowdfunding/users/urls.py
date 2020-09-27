@@ -10,7 +10,8 @@ urlpatterns = [
     path('users/supporters/', views.SupportersList.as_view()),
     path('users/staff/', views.StaffList.as_view()),
     path('users/newsletter/', views.NewsletterList.as_view()),
-    path('users/admin/<int:pk>/', views.AdminUserDetail.as_view())
+    path('users/admin/<int:pk>/', views.AdminUserDetail.as_view()),
+    path('users/admin/createuser/', views.AdminUserDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -82,6 +82,13 @@ class AdminUserDetail(APIView):
         serializer = CustomUserSerializer(user)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = CustomUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
     def put(self, request, pk):
         user = self.get_object(pk)
         data = request.data
