@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser
+from django.utils import timezone
 
 
 class CustomUserSerializer(serializers.Serializer):
@@ -13,12 +14,12 @@ class CustomUserSerializer(serializers.Serializer):
     bio = serializers.CharField(max_length=1000)
     phone = serializers.CharField(max_length=13)
     location = serializers.CharField(max_length=100)
-    newsletter_signup = serializers.BooleanField()
-    terms_privacy = serializers.BooleanField()
-    founder = serializers.BooleanField()
-    supporter = serializers.BooleanField()
-    is_staff = serializers.BooleanField()
-    created_on = serializers.DateTimeField()
+    newsletter_signup = serializers.BooleanField(default=True, write_only=True)
+    terms_privacy = serializers.BooleanField(default=True, write_only=True)
+    founder = serializers.BooleanField(default=False, write_only=True)
+    supporter = serializers.BooleanField(default=False, write_only=True)
+    is_staff = serializers.BooleanField(default=False, write_only=True)
+    created_on = serializers.DateTimeField(default=timezone.now, write_only=True)
 
     def create(self,validated_data):
         return CustomUser.objects.create_user(**validated_data)
@@ -55,3 +56,9 @@ class AdminUserDetailSerializer(CustomUserSerializer):
         instance.is_staff = validated_data.get('is_staff', instance.is_staff)
         instance.save()
         return instance
+
+class NewsletterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email']

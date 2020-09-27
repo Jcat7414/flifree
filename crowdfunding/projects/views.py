@@ -143,9 +143,9 @@ class PledgeDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST
             )
 
-    permission_classes = [
-        permissions.IsAdminUser
-    ]
+    # permission_classes = [
+    #     permissions.IsAdminUser
+    # ]
 
     def delete(self, request, pk):
         pledge = self.get_object(pk)

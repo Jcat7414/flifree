@@ -4,8 +4,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, generics, filters
 from .models import CustomUser
-from .serializers import CustomUserSerializer, CustomUserDetailSerializer, AdminUserDetailSerializer
+from .serializers import CustomUserSerializer, CustomUserDetailSerializer, NewsletterSerializer
 from .permissions import IsOwnerOrReadOnly, IsAdminUser
+
+class CreateUserList(APIView):
+
+    def post(self, request):
+        serializer = CustomUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
 
 class CustomUserList(APIView):
 
@@ -14,12 +24,6 @@ class CustomUserList(APIView):
         serializer = CustomUserSerializer(users, many=True)
         return Response(serializer.data)
 
-    def post(self, requesti):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
 
 class CustomUserDetail(APIView):
     permission_classes = [
@@ -102,6 +106,8 @@ class AdminUserDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+
 class FoundersList(generics.ListAPIView):
     serializer_class = CustomUserSerializer
 
@@ -126,3 +132,14 @@ class StaffList(generics.ListAPIView):
     def get_queryset(self):
         staff = CustomUser.objects.filter(is_staff=True)
         return staff
+
+class NewsletterList(generics.ListAPIView):
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
+
+    serializer_class = NewsletterSerializer
+
+    def get_queryset(self):
+        newsletter = CustomUser.objects.filter(newsletter_signup=True)
+        return newsletter

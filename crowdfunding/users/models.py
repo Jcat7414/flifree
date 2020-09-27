@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
 
 class CustomUser(AbstractUser):
     # password = models.CharField(max_length=80, verbose_name="password")
@@ -10,12 +9,12 @@ class CustomUser(AbstractUser):
     bio = models.TextField(max_length=1000, verbose_name="biography")
     phone = models.CharField(max_length=13, verbose_name="phone number")
     location = models.CharField(max_length=100, verbose_name="location")
-    newsletter_signup = models.BooleanField(default=True)
-    terms_privacy = models.BooleanField(default=True)
-    founder = models.BooleanField(verbose_name="founder", default=False)
-    supporter = models.BooleanField(verbose_name="supporter", default=False)
-    is_staff = models.BooleanField(verbose_name="admin", default=False)
-    created_on = models.DateTimeField(verbose_name="created on", default=timezone.now)
+    newsletter_signup = models.BooleanField(verbose_name="subscribe to newsletter")
+    terms_privacy = models.BooleanField(verbose_name="accept Terms & Privacy")
+    founder = models.BooleanField(verbose_name="founder")
+    supporter = models.BooleanField(verbose_name="supporter")
+    is_staff = models.BooleanField(verbose_name="admin")
+    created_on = models.DateTimeField(verbose_name="created on")
    
     @property
     def full_name(self):
