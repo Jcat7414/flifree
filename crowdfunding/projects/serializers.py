@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Project, Pledge, Update
+from django.utils import timezone
+
 
 
 class UpdateSerializer(serializers.Serializer):
@@ -34,7 +36,7 @@ class PledgeSerializer(serializers.ModelSerializer):
     supporter = serializers.SerializerMethodField('get_username_from_owner')
     supporter_email = serializers.SerializerMethodField('get_email_from_owner')
     supporter_phone = serializers.SerializerMethodField('get_phone_from_owner')
-    percent_pledged = serializers.IntegerField()
+    percent_pledged = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data):
         return Pledge.objects.create(**validated_data)
@@ -78,7 +80,7 @@ class ProjectSerializer(serializers.Serializer):
     needs_facilities = serializers.BooleanField(label='needs Facilities', default=False)
     needs_resources = serializers.BooleanField(label='needs Resources', default=False)
     needs_exposure = serializers.BooleanField(label='needs Exposure', default=False)
-    needs_expertise = serializers.BooleanField(label='needs Expertise', default=False)
+    needs_expertise = serializers.BooleanField(label='needs Expertise', default=True)
     project_stage = serializers.ChoiceField(
         choices=('Start', 'Trial', 'Adjust', 'Retail'),
         default='Start',
@@ -88,8 +90,8 @@ class ProjectSerializer(serializers.Serializer):
     project_faq = serializers.CharField(label='FAQ', default="A list of FAQ goes here.")
     project_image = serializers.URLField(label='project image', default="https://via.placeholder.com/300.jpg")
     is_open = serializers.BooleanField(label='project status', default=True)
-    date_created = serializers.DateTimeField(label='project commenced')
-    date_amended = serializers.DateTimeField(label='project last amended')
+    date_created = serializers.DateTimeField(label='project commenced', default=timezone.now)
+    date_amended = serializers.DateTimeField(label='project last amended', default=timezone.now)
     owner = serializers.ReadOnlyField(source='owner.id')
     founder = serializers.SerializerMethodField('get_username_from_owner')
 

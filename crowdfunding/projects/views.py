@@ -87,8 +87,8 @@ class PledgeList(APIView):
     def get(self, request):
         pledge = Pledge.objects.all()
         serializer = PledgeSerializer(pledge, many=True)
-        filter_backends = [filters.SearchFilter]
-        search_fields = ['pledge_description']
+        # filter_backends = [filters.SearchFilter]
+        # search_fields = ['pledge_description']
         return Response(serializer.data)
    
     def post(self, request):
@@ -143,9 +143,9 @@ class PledgeDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST
             )
 
-    # permission_classes = [
-    #     permissions.IsAdminUser
-    # ]
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
 
     def delete(self, request, pk):
         pledge = self.get_object(pk)
@@ -265,7 +265,6 @@ class ProjectUpdateList(generics.ListAPIView):
 
 
 class PledgeAmountList(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     def get(self, request):
         amount = Pledge.objects.all()
