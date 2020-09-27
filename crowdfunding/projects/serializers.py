@@ -128,16 +128,13 @@ class ProjectDetailSerializer(ProjectSerializer):
 class PledgeDetailSerializer(PledgeSerializer):
 
     def update(self, instance, validated_data):
-        instance.pledge_quantity = validated_data.get('pledge_quantity', instance.pledge_quantity)
         instance.pledge_description = validated_data.get('pledge_description', instance.pledge_description)
         instance.sup_facilities = validated_data.get('supporting Facilities', instance.sup_facilities)
         instancee.sup_resources = validated_data.get('supporting Resources', instance.sup_resources)
         instance.sup_exposure = validated_data.get('supporting Exposure', instance.sup_exposure)
         instance.sup_expertise = validated_data.get('supporting Expertise', instance.sup_expertise)
         instance.anonymous = validated_data.get('anonymous', instance.anonymous)
-        instance.terms_privacy = validated_data.get('terms_privacy', instance.terms_privacy)
         instance.is_fulfilled = validated_data.get('is_fulfilled', instance.is_fulfilled)
-        instance.project_id = validated_data.get('project_id', instance.project_id)
         instance.save()
         return instance
 

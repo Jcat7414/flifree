@@ -24,6 +24,13 @@ class CustomUserList(APIView):
         serializer = CustomUserSerializer(users, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = CustomUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
 
 class CustomUserDetail(APIView):
     permission_classes = [
@@ -81,13 +88,6 @@ class AdminUserDetail(APIView):
         user = self.get_object(pk)
         serializer = CustomUserSerializer(user)
         return Response(serializer.data)
-
-    def post(self, request):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
 
     def put(self, request, pk):
         user = self.get_object(pk)
