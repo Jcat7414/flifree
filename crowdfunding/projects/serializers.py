@@ -87,6 +87,7 @@ class ProjectSerializer(serializers.Serializer):
         label='stage'
     )
     project_story = serializers.CharField(label='story', default="The project owners background story goes here.")
+    project_needs = serializers.CharField(label='needs', default="Specific details about what is needed goes here.")
     project_faq = serializers.CharField(label='FAQ', default="A list of FAQ goes here.")
     project_image = serializers.URLField(label='project image', default="https://via.placeholder.com/300.jpg")
     is_open = serializers.BooleanField(label='project status', default=True)
@@ -119,6 +120,7 @@ class ProjectDetailSerializer(ProjectSerializer):
         instance.needs_expertise = validated_data.get('needs_expertise', instance.needs_expertise)
         instance.project_stage = validated_data.get('project_stage', instance.project_stage)
         instance.project_story = validated_data.get('project_story', instance.project_story)
+        instance.project_needs = validated_data.get('project_needs', instance.project_needs)
         instance.project_faq = validated_data.get('project_faq', instance.project_faq)
         instance.project_image = validated_data.get('project_image', instance.project_image)
         instance.is_open = validated_data.get('is_open', instance.is_open)

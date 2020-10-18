@@ -27,6 +27,7 @@ class Project(models.Model):
     needs_expertise = models.BooleanField()
     project_stage = models.CharField(max_length=10)
     project_story = models.TextField(max_length=5000)
+    project_needs = models.TextField(max_length=5000)
     project_faq = models.TextField(max_length=5000)
     project_image = models.URLField()
     is_open = models.BooleanField()
