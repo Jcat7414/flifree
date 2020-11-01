@@ -8,7 +8,7 @@ class UpdateSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     update_name = serializers.CharField(label='update about')
     update_content = serializers.CharField(label='project update')
-    update_date = serializers.DateTimeField(label='updated on')
+    update_date = serializers.DateTimeField(label='updated on', default=timezone.now)
     project_id = serializers.IntegerField()
     owner = serializers.ReadOnlyField(source='owner.id')
     author = serializers.SerializerMethodField('get_username_from_owner')
